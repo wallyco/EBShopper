@@ -1,5 +1,8 @@
 package com.github.wallyco.shopper.tools.tasking;
 
+import com.epicbot.api.shared.util.time.Time;
+import com.github.wallyco.shopper.tools.item.Memory;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -34,19 +37,13 @@ public class TaskManager {
 //        loopcounter++;
     }
     //TODO Probably dont need this
-//    private void getNext(){
-//        taskQueue.poll();
-//        if(taskQueue.peek() != null){
-//            resetTask();
-//        }else{
-//            ScriptManager.getScriptManager().stop();
-//        }
-//    }
+    private void getNext(){
+        taskQueue.poll();
+    }
 
     public boolean add(Task task) {
-        //log("Task Manager - add");
         if(!taskQueue.contains(task)) {
-            taskQueue.add(task);
+            Time.sleep(100, () -> taskQueue.add(task));
             return true;
         }
         return false;
@@ -58,7 +55,9 @@ public class TaskManager {
 
     private void executeTask(){
         if(!taskQueue.isEmpty()){
-            taskQueue.peek().execute();
+            if(!taskQueue.peek().execute()){
+                getNext();
+            }
         }
     }
 
@@ -78,4 +77,17 @@ public class TaskManager {
         }
     }
 
+    @Override
+    public String toString() {
+        return "TaskManager{" +
+                "taskQueue=" + taskQueue +
+                '}';
+    }
+
+    public String getCurrentTask(){
+        if(!taskQueue.isEmpty())
+            return taskQueue.peek().toString();
+        else
+            return "None";
+    }
 }

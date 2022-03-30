@@ -1,5 +1,7 @@
 package com.github.wallyco.shopper.tools.tasking;
 
-public interface Task {
-    void execute();
+import java.util.ArrayList;
+
+public interface Task{
+    boolean execute();
 }
